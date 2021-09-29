@@ -11,6 +11,6 @@ you can use it for subsequent design in Figma or Sketch.
 ## Product features
 
 - Browser name
-- Works pace
+- Work space
 - CSS pixel-ratio
 - Display bit
