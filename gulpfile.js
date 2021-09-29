@@ -51,15 +51,36 @@ function styles() {
     .pipe(browserSync.stream());
 }
 
+function compileDimensionsPage() {
+  return (
+    src([
+      // 'node_modules/jquery/dist/jquery.js',
+      'app/js/components/_header.js',
+      'app/js/components/_dimensions.js',
+    ])
+      .pipe(concat('dimensions-page.min.js'))
+      // .pipe(uglify())
+      .pipe(dest('app/js'))
+      // .pipe(browserSync.stream())
+  );
+}
+
+function compileResolutionsPage() {
+  return (
+    src([
+      // 'node_modules/jquery/dist/jquery.js',
+      'app/js/components/_header.js',
+      'app/js/components/_resolutions.js',
+    ])
+      .pipe(concat('resolutions-page.min.js'))
+      // .pipe(uglify())
+      .pipe(dest('app/js'))
+      // .pipe(browserSync.stream())
+  );
+}
+
 function scripts() {
-  return src([
-    // 'node_modules/jquery/dist/jquery.js',
-    'app/js/main.js',
-  ])
-    .pipe(concat('main.min.js'))
-    .pipe(uglify())
-    .pipe(dest('app/js'))
-    .pipe(browserSync.stream());
+  return (compileDimensionsPage(), compileResolutionsPage()).pipe(browserSync.stream());
 }
 
 function images() {
@@ -94,7 +115,7 @@ function images() {
 }
 
 function build() {
-  return src(['app/*.html', 'app/css/style.min.css', 'app/js/main.min.js', 'app/fonts/*.*'], {
+  return src(['app/*.html', 'app/css/style.min.css', 'app/js/*.min.js', 'app/fonts/*.*'], {
     base: 'app',
   }).pipe(dest('dist'));
 }
@@ -106,7 +127,7 @@ function cleanDist() {
 function watching() {
   watch(['app/html/**/*.html'], fileinclude);
   watch(['app/scss/**/*.scss'], styles);
-  watch(['app/js/**/*.js', '!app/js/main.min.js'], scripts);
+  watch(['app/js/components/*.js'], scripts);
   watch(['app/**/*.html']).on('change', browserSync.reload);
 }
 

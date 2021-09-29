@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>Screen sizer - Find out screen resolution | Beta</title>
+  <title>Screen sizer - Screen resolutions table | Beta</title>
 
   <link rel="shortcut icon" type="image/png" href="favicon.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -13,7 +13,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.min.css">
   <meta name="theme-color" content="#ffffff">
-  <script src="js/dimensions-page.min.js" defer></script>
+  <script src="js/main.min.js" defer></script>
 </head>
 
 <body>
@@ -34,7 +34,7 @@
       <div class="header__wrap">
         <ul class="header__menu">
           <li class="header__item">
-            <a class="header__link" href="/resolutions.html">SR Table</a>
+            <a class="header__link" href="/index.html">Home page</a>
           </li>
           <li class="header__item">
             <a class="header__link" href="#" data-info="pixels">Pixels</a>
@@ -60,55 +60,9 @@
   <div class="header__overlay"></div>
 </header>
 
-  <main id="content">
-    <section class="dimensions">
-  <div class="container">
-    <h1 class="sr-only">
-      Some features here
-    </h1>
+  <div id="content">
 
-    <div class="dimensions__wrapper">
-      <h2 class="sr-only">
-        Dimensions
-      </h2>
-
-      <div class="dimensions__wrap">
-        <div class="dimensions__sizes">
-          <span class="dimensions__width" id="dimensions_width"></span>
-          <span>
-            x
-          </span>
-          <span class="dimensions__height" id="dimensions_height"></span>
-        </div>
-      </div>
-
-      <ul class="dimensions__info">
-        <li class="dimensions__item">
-  <h3 class="dimensions__heading">
-    Browser name:
-  </h3>
-  <span id="browser_name"></span>
-</li><li class="dimensions__item">
-  <h3 class="dimensions__heading">
-    Works pace:
-  </h3>
-  <span id="work_space"></span>
-</li><li class="dimensions__item">
-  <h3 class="dimensions__heading">
-    CSS pixel-ratio:
-  </h3>
-  <span id="pixel_ratio"></span>
-</li><li class="dimensions__item">
-  <h3 class="dimensions__heading">
-    Display bit:
-  </h3>
-  <span id="display_bit"></span>
-</li>
-      </ul>
-    </div>
   </div>
-</section>
-  </main>
 
   <section class="modal" id="modal"></section>
 </body>

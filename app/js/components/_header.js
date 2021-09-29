@@ -1,28 +1,22 @@
-const headerTop = document.body.querySelector('.header__top');
-const headerMenu = headerTop.querySelector('.header__menu');
-const headerNavigation = headerTop.querySelector('.header__navigation');
+// _header.js start
+const header = document.body.querySelector('.header');
+const headerWrap = header.querySelector('.header__wrap');
+const headerNavigation = header.querySelector('.header__navigation');
+const content = document.getElementById('content');
+const modal = document.getElementById('modal');
 
-const headerContent = document.body.querySelector('.header__content');
-
-const modal = document.body.querySelector('.modal');
-
-const dimensionsWidth = document.querySelector('#dimensions_width');
-const dimensionsHeight = document.querySelector('#dimensions_height');
-const browserName = document.querySelector('#browser_name');
-const workSpace = document.querySelector('#work_space');
-const pixelRatio = document.querySelector('#pixel_ratio');
-const displayBit = document.querySelector('#display_bit');
-
-function headerToggleActive() {
-  if (headerTop.classList.contains('header__top--active')) {
-    headerTop.classList.remove('header__top--active');
+// добавляет/убирает активный класс для блока header
+const headerToggleActive = () => {
+  if (header.classList.contains('header--active')) {
+    header.classList.remove('header--active');
     enableScroll();
   } else {
-    headerTop.classList.add('header__top--active');
+    header.classList.add('header--active');
     disableScroll();
   }
-}
+};
 
+// отключает возможность прокрутки страницы
 const disableScroll = () => {
   if (document.disableScroll) return;
   const widthScroll = window.innerWidth - document.body.offsetWidth;
@@ -39,6 +33,7 @@ const disableScroll = () => {
   `;
 };
 
+// возвращает возможность прокрутки страницы
 function enableScroll() {
   document.disableScroll = false;
   document.body.style.cssText = ``;
@@ -47,44 +42,14 @@ function enableScroll() {
   });
 }
 
-function clientResize() {
-  // изменяет высоту блока header__content при изменении размеров header__top
-  headerContent.style.height = document.documentElement.clientHeight - headerTop.offsetHeight + 'px';
+// изменяет высоту блока content при изменении размеров области просмотра или высоты header
+// размещает содержимое блока content по-центру
+function contentResize() {
+  content.style.height = document.documentElement.clientHeight - header.offsetHeight + 'px';
 }
 
-function setMenuHeight() {
-  if (innerWidth < 769) {
-    headerMenu.style.cssText = `
-    bottom: -${headerMenu.offsetHeight}px;
-    padding-bottom: ${headerNavigation.querySelector('.header__more').offsetHeight + 26}px;
-  `;
-  } else {
-    headerMenu.style = '';
-  }
-}
-
-function setDimensionsWidth() {
-  // dimensionsWidth.textContent = screen.width * devicePixelRatio.toFixed(1);
-  dimensionsWidth.textContent = screen.width;
-}
-
-function setDimensionsHeight() {
-  // dimensionsHeight.textContent = screen.height * devicePixelRatio.toFixed(1);
-  dimensionsHeight.textContent = screen.height;
-}
-
-function setWorkSpace() {
-  workSpace.textContent = `${document.documentElement.clientWidth}x${document.documentElement.clientHeight}`;
-}
-
-function setPixelRatio() {
-  pixelRatio.textContent = devicePixelRatio.toFixed(1);
-}
-
-function setDisplayBit() {
-  displayBit.textContent = window.screen.pixelDepth;
-}
-
+// если область просмотра меньше по высоте чем высота модального окна, то задаёт
+// модальному окну 'flex-start' => позволяя скролить модальное окно
 function toggleStickModalToTop() {
   if (modal.children.item('modal__content').offsetHeight >= document.documentElement.clientHeight) {
     modal.style.alignItems = 'flex-start';
@@ -93,6 +58,7 @@ function toggleStickModalToTop() {
   }
 }
 
+// создаёт модальное окно
 function renderModal(obj, attr) {
   const modalContent = document.createElement('div');
   modalContent.className = 'modal__content';
@@ -109,6 +75,7 @@ function renderModal(obj, attr) {
   toggleStickModalToTop();
 }
 
+// убирает модальное окно через 200мс, ждёт пока отработает анимация
 function removeModal() {
   if (modal.classList.contains('modal--active')) {
     modal.classList.remove('modal--active');
@@ -118,77 +85,39 @@ function removeModal() {
   }
 }
 
-let browserNameIndex = '';
-if (navigator.userAgent.search(/Safari/) > 0) {
-  browserNameIndex = 'Safari';
-}
-if (navigator.userAgent.search(/Firefox/) > 0) {
-  browserNameIndex = 'Firefox';
-}
-if (navigator.userAgent.search(/MSIE/) > 0 || navigator.userAgent.search(/NET CLR /) > 0) {
-  browserNameIndex = 'Explorer';
-}
-if (navigator.userAgent.search(/Chrome/) > 0) {
-  browserNameIndex = 'Chrome';
-}
-if (navigator.userAgent.search(/YaBrowser/) > 0) {
-  browserNameIndex = 'Yandex';
-}
-if (navigator.userAgent.search(/OPR/) > 0) {
-  browserNameIndex = 'Opera';
-}
-if (navigator.userAgent.search(/Konqueror/) > 0) {
-  browserNameIndex = 'Konqueror';
-}
-if (navigator.userAgent.search(/Iceweasel/) > 0) {
-  browserNameIndex = 'Iceweasel';
-}
-if (navigator.userAgent.search(/SeaMonkey/) > 0) {
-  browserNameIndex = 'SeaMonkey';
-}
-if (navigator.userAgent.search(/Edge/) > 0) {
-  browserNameIndex = 'Edge';
-}
-browserName.textContent = browserNameIndex;
-
 window.addEventListener('load', () => {
-  clientResize();
-  setDimensionsWidth();
-  setDimensionsHeight();
-  setWorkSpace();
-  setPixelRatio();
-  setDisplayBit();
-
-  setMenuHeight();
+  contentResize();
 });
 
 window.addEventListener('resize', (e) => {
-  clientResize();
-  setDimensionsWidth();
-  setDimensionsHeight();
-  setWorkSpace();
-  setPixelRatio();
-  setDisplayBit();
+  contentResize();
 
-  if (headerTop.classList.contains('header__top--active') && e.target.innerWidth > 768) {
+  if (header.classList.contains('header--active') && e.target.innerWidth > 768) {
     headerToggleActive();
   }
-
-  setMenuHeight();
 
   if (modal.children.item('modal__content')) toggleStickModalToTop();
 });
 
-headerTop.addEventListener('click', (e) => {
+header.addEventListener('click', (e) => {
   const { target } = e;
-  if (target.closest('.header__burger')) headerToggleActive();
+  if (target.closest('.header__burger') || target.closest('.header__overlay')) {
+    headerToggleActive();
+  }
   // if (target.closest('.header__link')) headerToggleActive();
-  if (!headerTop.matches('.header__top--active') && modal.matches('.modal--active') && window.innerWidth < 768) {
+  if (
+    !header.matches('.header--active') &&
+    modal.matches('.modal--active') &&
+    window.innerWidth < 768
+  ) {
     // headerToggleActive();
     removeModal();
   }
-  if (target.closest('.header__overlay')) headerToggleActive();
-  if (target.closest('.header__link')) {
+  // .hasAttribute('data-info')
+  if (
+    target.closest('.header__link') &&
+    target.closest('.header__link').hasAttribute('data-info')
+  ) {
     e.preventDefault();
     const headerLinkAttribute = target.closest('.header__link').getAttribute('data-info');
     renderModal(modalData, headerLinkAttribute);
@@ -265,3 +194,5 @@ const modalData = {
   </span>
   `,
 };
+console.log('_header.js');
+// _header.js end

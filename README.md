@@ -7,3 +7,10 @@
 
 > An application to display the screen resolution in pixels, 
 you can use it for subsequent design in Figma or Sketch.
+
+## Product features
+
+- Browser name
+- Works pace
+- CSS pixel-ratio
+- Display bit
