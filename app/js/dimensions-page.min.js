@@ -108,7 +108,7 @@ header.addEventListener('click', (e) => {
   if (
     !header.matches('.header--active') &&
     modal.matches('.modal--active') &&
-    window.innerWidth < 768
+    window.innerWidth <= 768
   ) {
     // headerToggleActive();
     removeModal();
