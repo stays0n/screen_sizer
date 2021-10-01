@@ -19,7 +19,7 @@ window.addEventListener('resize', () => {
 
 setTimeout(() => {
   window.location.replace('index.html');
-}, 6000);
+}, 8000);
 
-console.log('_404.js');
+// console.log('_404.js');
 // _404.js end

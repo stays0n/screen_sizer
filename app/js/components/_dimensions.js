@@ -76,5 +76,5 @@ window.addEventListener('resize', () => {
   setDisplayBit();
 });
 
-console.log('_dimensions.js');
+// console.log('_dimensions.js');
 // _dimensions.js end

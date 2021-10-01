@@ -189,10 +189,13 @@ const modalData = {
   <a class="modal__link" href="./rls/screen_sizer_0.001.apk" download="">
     Install .apk file
   </a>
+  <a class="modal__link" href="./policy.html">
+    Privacy policy
+  </a>
   <span class="modal__ver">
     Ver 0.001
   </span>
   `,
 };
-console.log('_header.js');
+// console.log('_header.js');
 // _header.js end

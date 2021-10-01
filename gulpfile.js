@@ -52,51 +52,58 @@ function styles() {
 }
 
 function compileDimensionsPage() {
-  return (
-    src([
-      // 'node_modules/jquery/dist/jquery.js',
-      'app/js/components/_header.js',
-      'app/js/components/_dimensions.js',
-    ])
-      .pipe(concat('dimensions-page.min.js'))
-      // .pipe(uglify())
-      .pipe(dest('app/js'))
-    // .pipe(browserSync.stream())
-  );
+  return src([
+    // 'node_modules/jquery/dist/jquery.js',
+    'app/js/components/_header.js',
+    'app/js/components/_dimensions.js',
+  ])
+    .pipe(concat('dimensions-page.min.js'))
+    .pipe(uglify())
+    .pipe(dest('app/js'));
+  // .pipe(browserSync.stream())
 }
 
 function compileResolutionsPage() {
-  return (
-    src([
-      // 'node_modules/jquery/dist/jquery.js',
-      'app/js/components/_header.js',
-      'app/js/components/_resolutions.js',
-    ])
-      .pipe(concat('resolutions-page.min.js'))
-      // .pipe(uglify())
-      .pipe(dest('app/js'))
-    // .pipe(browserSync.stream())
-  );
+  return src([
+    // 'node_modules/jquery/dist/jquery.js',
+    'app/js/components/_header.js',
+    'app/js/components/_resolutions.js',
+  ])
+    .pipe(concat('resolutions-page.min.js'))
+    .pipe(uglify())
+    .pipe(dest('app/js'));
+  // .pipe(browserSync.stream())
+}
+
+function compilePolicyPage() {
+  return src([
+    // 'node_modules/jquery/dist/jquery.js',
+    'app/js/components/_header.js',
+    'app/js/components/_policy.js',
+  ])
+    .pipe(concat('policy-page.min.js'))
+    .pipe(uglify())
+    .pipe(dest('app/js'));
+  // .pipe(browserSync.stream())
 }
 
 function compile404Page() {
-  return (
-    src([
-      // 'node_modules/jquery/dist/jquery.js',
-      'app/js/components/_header.js',
-      'app/js/components/_404.js',
-    ])
-      .pipe(concat('404-page.min.js'))
-      // .pipe(uglify())
-      .pipe(dest('app/js'))
-    // .pipe(browserSync.stream())
-  );
+  return src([
+    // 'node_modules/jquery/dist/jquery.js',
+    'app/js/components/_header.js',
+    'app/js/components/_404.js',
+  ])
+    .pipe(concat('404-page.min.js'))
+    .pipe(uglify())
+    .pipe(dest('app/js'));
+  // .pipe(browserSync.stream())
 }
 
 function scripts() {
-  return (compileDimensionsPage(), compileResolutionsPage(), compile404Page()).pipe(
-    browserSync.stream(),
-  );
+  return (compileDimensionsPage(),
+  compileResolutionsPage(),
+  compilePolicyPage(),
+  compile404Page()).pipe(browserSync.stream());
 }
 
 function images() {
@@ -131,9 +138,19 @@ function images() {
 }
 
 function build() {
-  return src(['app/*.html', 'app/css/style.min.css', 'app/js/*.min.js', 'app/fonts/*.*'], {
-    base: 'app',
-  }).pipe(dest('dist'));
+  return src(
+    [
+      'app/*.html',
+      'app/css/style.min.css',
+      'app/js/*.min.js',
+      'app/fonts/*.*',
+      'app/*.ico',
+      'app/*.svg',
+    ],
+    {
+      base: 'app',
+    },
+  ).pipe(dest('dist'));
 }
 
 function cleanDist() {

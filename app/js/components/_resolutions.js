@@ -94,5 +94,5 @@ window.addEventListener('resize', () => {
   toggleStickContentToTop();
 });
 
-console.log('_resolutions.js');
+// console.log('_resolutions.js');
 // _resolutions.js ens
