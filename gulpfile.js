@@ -61,7 +61,7 @@ function compileDimensionsPage() {
       .pipe(concat('dimensions-page.min.js'))
       // .pipe(uglify())
       .pipe(dest('app/js'))
-      // .pipe(browserSync.stream())
+    // .pipe(browserSync.stream())
   );
 }
 
@@ -75,12 +75,28 @@ function compileResolutionsPage() {
       .pipe(concat('resolutions-page.min.js'))
       // .pipe(uglify())
       .pipe(dest('app/js'))
-      // .pipe(browserSync.stream())
+    // .pipe(browserSync.stream())
+  );
+}
+
+function compile404Page() {
+  return (
+    src([
+      // 'node_modules/jquery/dist/jquery.js',
+      'app/js/components/_header.js',
+      'app/js/components/_404.js',
+    ])
+      .pipe(concat('404-page.min.js'))
+      // .pipe(uglify())
+      .pipe(dest('app/js'))
+    // .pipe(browserSync.stream())
   );
 }
 
 function scripts() {
-  return (compileDimensionsPage(), compileResolutionsPage()).pipe(browserSync.stream());
+  return (compileDimensionsPage(), compileResolutionsPage(), compile404Page()).pipe(
+    browserSync.stream(),
+  );
 }
 
 function images() {

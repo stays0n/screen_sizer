@@ -29,9 +29,9 @@
 
     @include width-768 {
       // width: 100%;
-      max-height: initial;
-      height: 100%;
       max-width: initial;
+      height: 100%;
+      max-height: initial;
       padding-bottom: 100px;
       border-radius: 0;
       overflow-y: auto;

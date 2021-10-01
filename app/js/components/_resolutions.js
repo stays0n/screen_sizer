@@ -29,11 +29,13 @@ const resolutionsData = {
     { device: 'iPhone 12 Pro Max', resolution: '1284 × 2778' },
   ],
 };
+const OS = localStorage.getItem('OS')
+  ? localStorage.getItem('OS')
+  : Object.keys(resolutionsData)[0];
 
-const toggleHeightResolutionsWrapper = () => {
+const toggleStickContentToTop = () => {
   if (resolutionsWrapper.offsetHeight + 100 > window.innerHeight) {
     resolutionsWrapper.closest('.resolutions').style.alignItems = 'flex-start';
-
   } else {
     resolutionsWrapper.closest('.resolutions').style.alignItems = '';
   }
@@ -67,6 +69,8 @@ const removeTBody = (table) => {
 };
 
 for (let btn of resolutionsButtons) {
+  btn.getAttribute('data-device') === OS && btn.classList.add('resolutions__button--active');
+
   btn.addEventListener('click', () => {
     resolutionsButtons.forEach((item) => {
       item.classList.remove('resolutions__button--active');
@@ -76,24 +80,18 @@ for (let btn of resolutionsButtons) {
     const btnAttr = btn.getAttribute('data-device');
     removeTBody(resolutionsTable);
     renderTBody(resolutionsTable, resolutionsData, btnAttr);
+    localStorage.setItem('OS', btnAttr);
   });
 }
 
 window.addEventListener('load', () => {
-  renderTBody(resolutionsTable, resolutionsData, Object.keys(resolutionsData)[0]);
-  toggleHeightResolutionsWrapper();
+  renderTBody(resolutionsTable, resolutionsData, OS);
+
+  toggleStickContentToTop();
 });
 
-window.addEventListener('resize', (e) => {
-  toggleHeightResolutionsWrapper();
-  if (window.innerWidth > 768) {
-  }
-
-  // contentResize();
-  // if (header.classList.contains('header--active') && e.target.innerWidth > 768) {
-  //   headerToggleActive();
-  // }
-  // if (modal.children.item('modal__content')) toggleStickModalToTop();
+window.addEventListener('resize', () => {
+  toggleStickContentToTop();
 });
 
 console.log('_resolutions.js');
