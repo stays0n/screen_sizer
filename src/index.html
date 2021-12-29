@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+
+@@include('./html/_head.html', {
+'title': 'Find out screen resolution',
+'page': 'dimensions',
+})
+
+<body>
+  @@include('./html/header/_header.html', {
+  'href': 'resolutions.html',
+  'to': 'SR Table',
+  })
+
+  <main id="content">
+    @@include('./html/dimensions/_dimensions.html')
+  </main>
+
+  @@include('./html/_modal.html')
+</body>
+
+</html>

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+
+@@include('./html/_head.html', {
+'title': 'Page not found',
+'page': 'page404',
+})
+
+<body>
+  @@include('./html/header/_header.html', {
+  'href': 'index.html',
+  'to': 'Home page',
+  })
+
+  <main id="content">
+    @@include('./html/404/_page-404.html')
+  </main>
+
+  @@include('./html/_modal.html')
+</body>
+
+</html>

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+
+@@include('./html/_head.html', {
+'title': 'Screen resolutions table',
+'page': 'resolutions',
+})
+
+<body>
+  @@include('./html/header/_header.html', {
+  'href': 'index.html',
+  'to': 'Home page',
+  })
+
+  <main id="content">
+    @@include('./html/resolutions/_resolutions.html')
+  </main>
+
+  @@include('./html/_modal.html')
+</body>
+
+</html>
