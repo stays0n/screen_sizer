@@ -1,122 +1,62 @@
-const { src, dest, watch, parallel, series } = require('gulp');
-const scss = require('gulp-sass');
-const concat = require('gulp-concat');
-const autoprefixer = require('gulp-autoprefixer');
-const uglify = require('gulp-uglify');
-const imagemin = require('gulp-imagemin');
-const del = require('del');
-const browserSync = require('browser-sync').create();
-const fileInclude = require('gulp-file-include');
+import gulp from 'gulp';
+// импорт путей
+import { path } from './gulp/config/path.js';
+// импорт общих плагинов
+import { plugins } from './gulp/config/plugins.js';
 
-function browsersync() {
-  browserSync.init({
-    server: {
-      baseDir: 'app/',
-    },
-    notify: false,
-  });
+// передаём значения в глобальную переменную
+global.app = {
+    isBuild: process.argv.includes('--build'),
+    isDev: !process.argv.includes('--build'),
+    gulp: gulp,
+    path: path,
+    plugins: plugins,
+};
+
+// импорт задач
+import { copy } from './gulp/tasks/copy.js';
+import { reset } from './gulp/tasks/reset.js';
+import { html } from './gulp/tasks/html.js';
+import { server } from './gulp/tasks/server.js';
+import { scss } from './gulp/tasks/scss.js';
+import { js } from './gulp/tasks/js.js';
+import { images } from './gulp/tasks/images.js';
+import { otfToTtf, ttfToWoff, fontsStyle } from './gulp/tasks/fonts.js';
+import { svgSprite } from './gulp/tasks/svgSprite.js';
+import { zip } from './gulp/tasks/zip.js';
+import { ftp } from './gulp/tasks/ftp.js';
+
+// наблюдатель за изменениями в файлах
+function watcher() {
+    gulp.watch(path.watch.files, copy);
+    gulp.watch(path.watch.html, html);
+    gulp.watch(path.watch.scss, scss);
+    gulp.watch(path.watch.js, js);
+    gulp.watch(path.watch.images, images);
+    // gulp.watch(path.watch.html, gulp.series(html, ftp)); // если нужно при изменении фалов html отправлять их на сервер
 }
 
-function fileinclude() {
-  return src(['app/html/*.html'])
-    .pipe(
-      fileInclude({
-        prefix: '@@',
-        basepath: 'app/html/parts',
-        context: {
-          name: 'current',
-          arr: [],
-        },
-      }),
-    )
-    .pipe(dest('app'))
-    .pipe(browserSync.stream());
-}
+// последовательная обработка шрифтов
+const fonts = gulp.series(otfToTtf, ttfToWoff, fontsStyle);
 
-function styles() {
-  return src(['app/scss/style.scss'])
-    .pipe(
-      scss({
-        outputStyle: 'compressed',
-      }),
-    ) //compressed, expanded
-    .pipe(concat('style.min.css')) // style.min.css, style.css
-    .pipe(
-      autoprefixer({
-        overrideBrowserslist: ['last 10 versions'],
-        grid: true,
-      }),
-    )
-    .pipe(dest('app/css'))
-    .pipe(browserSync.stream());
-}
+// основные задачи
+const mainTasks = gulp.series(
+    fonts,
+    gulp.parallel(copy, html, scss, js, images),
+);
 
-function scripts() {
-  return src([
-    // 'node_modules/jquery/dist/jquery.js',
-    'app/js/main.js',
-  ])
-    .pipe(concat('main.min.js'))
-    .pipe(uglify())
-    .pipe(dest('app/js'))
-    .pipe(browserSync.stream());
-}
+// построение сценариев выполнения задач
+const dev = gulp.series(reset, mainTasks, gulp.parallel(watcher, server));
+const build = gulp.series(reset, mainTasks, svgSprite);
+const deployZIP = gulp.series(build, zip);
+const deployFTP = gulp.series(build, ftp);
 
-function images() {
-  return src(['app/images/**/*.*'], {
-    base: 'app',
-  })
-    .pipe(
-      imagemin([
-        imagemin.gifsicle({
-          interlaced: true,
-        }),
-        imagemin.mozjpeg({
-          quality: 75,
-          progressive: true,
-        }),
-        imagemin.optipng({
-          optimizationLevel: 5,
-        }),
-        imagemin.svgo({
-          plugins: [
-            {
-              removeViewBox: true,
-            },
-            {
-              cleanupIDs: false,
-            },
-          ],
-        }),
-      ]),
-    )
-    .pipe(dest('dist'));
-}
+// экспорт сценариев для создания отдельных скриптов в package.json
+export { dev };
+export { build };
+export { deployZIP };
+export { deployFTP };
+export { svgSprite };
 
-function build() {
-  return src(['app/*.html', 'app/css/style.min.css', 'app/js/main.min.js', 'app/fonts/*.*'], {
-    base: 'app',
-  }).pipe(dest('dist'));
-}
-
-function cleanDist() {
-  return del('dist');
-}
-
-function watching() {
-  watch(['app/html/**/*.html'], fileinclude);
-  watch(['app/scss/**/*.scss'], styles);
-  watch(['app/js/**/*.js', '!app/js/main.min.js'], scripts);
-  watch(['app/**/*.html']).on('change', browserSync.reload);
-}
-
-exports.fileinclude = fileinclude;
-exports.styles = styles;
-exports.scripts = scripts;
-exports.browsersync = browsersync;
-exports.watching = watching;
-exports.default = parallel(fileinclude, styles, scripts, browsersync, watching); // >gulp (отключить слежение ctrl + c)
-
-exports.cleanDist = cleanDist;
-exports.images = images;
-exports.build = series(cleanDist, images, build); // >gulp build
+// выполнение сценария по умолчанию
+gulp.task('default', dev);
